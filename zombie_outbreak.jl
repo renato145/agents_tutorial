@@ -16,8 +16,10 @@ function initialize(; map_path=OSM.TEST_MAP)
 	end
 
 	# add a patient zero at a specific location
-	start = OSM.road((39.52320181536525, -119.78917553184259), model)
-    finish = OSM.intersection((39.510773, -119.75916700000002), model)
+	# start = OSM.road((79.52320181536525, -119.78917553184259), model)
+    # finish = OSM.intersection((39.510773, -119.75916700000002), model)
+	start = random_position(model) # at an intersection
+	finish = OSM.random_road_position(model) # somewhere on a road
 	route = OSM.plan_route(start, finish, model)
 	zombie = add_agent!(start, model, route, finish, true)
 
@@ -65,11 +67,11 @@ function plotagents(model)
 	)
 end
 
-model = initialize()
+model = initialize(; map_path="limamap.osm")
 
-# @time step!(model, agent_step!, 10)
-# @time plotmap(model.space.m)
-# @time plotagents(model)
+@time step!(model, agent_step!, 10)
+@time plotmap(model.space.m)
+@time plotagents(model)
 
 frames = @animate for i in 0:20
 	print(i)
